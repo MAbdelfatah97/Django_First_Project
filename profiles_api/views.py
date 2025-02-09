@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from profiles_api import serializers
 from profiles_api import models
 from profiles_api import permissions
-from profiles_api import renderers
+from renderers import CustomBrowsableAPIRenderer
 
 from datetime import date
 
@@ -145,7 +145,7 @@ class ProfilePictureViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ProfilePictureSerializer
     queryset = models.ProfilePicture.objects.all()
     permission_classes = (permissions.UpdateOwnProfilePicture,IsAuthenticated)
-    renderer_classes = [renderers.CustomBrowsableAPIRenderer] + api_settings.DEFAULT_RENDERER_CLASSES
+    renderer_classes = [CustomBrowsableAPIRenderer] + api_settings.DEFAULT_RENDERER_CLASSES
     
     def perform_create(self, serializer):
         """Sets the user profile to the logged in user"""
