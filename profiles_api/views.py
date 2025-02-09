@@ -136,3 +136,15 @@ class UserProfileFeedViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         """Sets the user profile to the logged in user"""
         serializer.save(user_profile=self.request.user)
+
+
+class ProfilePictureViewSet(viewsets.ModelViewSet):
+    """Handles creating, reading and updating profile pictures"""
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = serializers.ProfilePictureSerializer
+    queryset = models.ProfilePicture.objects.all()
+    permission_classes = (permissions.UpdateOwnProfilePicture,IsAuthenticated)
+
+    def perform_create(self, serializer):
+        """Sets the user profile to the logged in user"""
+        serializer.save(user_profile=self.request.user)
