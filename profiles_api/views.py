@@ -144,7 +144,8 @@ class ProfilePictureViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ProfilePictureSerializer
     queryset = models.ProfilePicture.objects.all()
     permission_classes = (permissions.UpdateOwnProfilePicture,IsAuthenticated)
-
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+    
     def perform_create(self, serializer):
         """Sets the user profile to the logged in user"""
         serializer.save(user_profile=self.request.user)
