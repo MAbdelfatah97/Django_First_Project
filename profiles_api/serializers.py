@@ -6,6 +6,7 @@ from profiles_api import models
 class HelloSerializer(serializers.Serializer):
     """Serializes a name field for testing our APIView"""
     name = serializers.CharField(max_length=10)
+    birthdate = serializers.DateField()
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -13,7 +14,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.UserProfile
-        fields = ('id', 'email', 'name', 'password')
+        fields = ('id', 'email', 'name', 'birthdate', 'password')
         extra_kwargs = {
             'password': {
                 'write_only': True,
@@ -26,20 +27,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
         user = models.UserProfile.objects.create_user(
             email=validated_data['email'],
             name=validated_data['name'],
-            password=validated_data['password']
+            password=validated_data['password'],
+            birthdate=validated_data['birthdate']
         )
 
         return user
-
-    def update(self, instance, validated_data):
-        """Handle updating user account"""
-        if 'password' in validated_data:
-            password = validated_data.pop('password')
-            instance.set_password(password)
-
-        return super().update(instance, validated_data)
-
-
+    
 class ProfileFeedItemSerializer(serializers.ModelSerializer):
     """Serializes profile feed items"""
 
@@ -47,3 +40,4 @@ class ProfileFeedItemSerializer(serializers.ModelSerializer):
         model = models.ProfileFeedItem
         fields = ('id', 'user_profile', 'status_text', 'created_on')
         extra_kwargs = {'user_profile': {'read_only': True}}
+    
