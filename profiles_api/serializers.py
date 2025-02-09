@@ -44,10 +44,21 @@ class ProfileFeedItemSerializer(serializers.ModelSerializer):
 
 class ProfilePictureSerializer(serializers.ModelSerializer):
     """Serializes profile picture"""
+    image_tag = serializers.SerializerMethodField()
 
     class Meta:
         model = models.ProfilePicture
-        fields = ('id', 'user_profile', 'picture', 'created_on')
+        fields = ('id', 'user_profile', 'picture', 'image_tag', 'created_on')
         extra_kwargs = {'user_profile': {'read_only': True}}
+
+    def get_image_tag(self, obj):
+        return f'<img src="{obj.picture.url}" width="200" />'
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        request = self.context.get('request')
+        if request.accepted_renderer.format == 'html':
+            representation['image_tag'] = self.get_image_tag(instance)
+        return representation
 
     
