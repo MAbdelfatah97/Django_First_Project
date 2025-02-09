@@ -49,3 +49,5 @@ class ProfilePictureSerializer(serializers.ModelSerializer):
         model = models.ProfilePicture
         fields = ('id', 'user_profile', 'picture', 'created_on')
         extra_kwargs = {'user_profile': {'read_only': True}}
+
+    
